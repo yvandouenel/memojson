@@ -1,32 +1,31 @@
 import React, { Component } from "react";
 import Carte from "./Carte";
+import Requete from "./Requete";
 class Colonne extends Component {
-  state = {
-    cartes: [
-      {
-        id: 50,
-        question: "Date de création de UNIX",
-        reponse: "1969 - 1970",
-        show_reponse: false,
-        show_form: false
-      },
-      {
-        id: 32,
-        question: "Qui a créé le noyau Linux ?",
-        reponse: "Linus Torvalds en 1991.",
-        show_reponse: false,
-        show_form: false
-      },
-      {
-        id: 52,
-        question:
-          "Commande pour savoir où l'on se trouve dans l'arborescence ?",
-        reponse: "pwd",
-        show_reponse: false,
-        show_form: false
-      }
-    ]
-  };
+  constructor(){
+    super();
+    // Création de la requête avec des méthodes passées
+    // en paramètres ou des "CALLBACK"
+    new Requete(this.successData, this.failedData);
+    this.state = {
+      cartes: []
+    };
+  }
+  successData = (data) => {
+    console.log("dans successData");
+    // Tout baigne, voici le contenu de la réponse
+    console.log("cartes : ", data);
+    // création d'un copie du state
+    let copy_state = {...this.state};
+    // modification de la copie
+    copy_state.cartes = data;
+    // Comparaison avec le state local
+    this.setState(copy_state);
+  }
+  failedData = () => {
+    console.log("dans failedData : il se peut que vous n'ayez pas de réseau !");
+  }
+
   render() {
     return (
       <section>
@@ -36,7 +35,6 @@ class Colonne extends Component {
         {this.state.cartes.map(carte => {
           return <Carte key={carte.id} question={carte.question} reponse={carte.reponse} />
         })}
-
       </section>
     );
   }
