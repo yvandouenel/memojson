@@ -1,39 +1,49 @@
 import React, { Component } from "react";
 import Carte from "./Carte";
-import Requete from "./Requete";
+
 class Colonne extends Component {
-  constructor(){
-    super();
-    // Création de la requête avec des méthodes passées
-    // en paramètres ou des "CALLBACK"
-    new Requete(this.successData, this.failedData);
-    this.state = {
-      cartes: []
-    };
-  }
-  successData = (data) => {
-    console.log("dans successData");
-    // Tout baigne, voici le contenu de la réponse
-    console.log("cartes : ", data);
-    // création d'un copie du state
-    let copy_state = {...this.state};
-    // modification de la copie
-    copy_state.cartes = data;
-    // Comparaison avec le state local
-    this.setState(copy_state);
-  }
-  failedData = () => {
-    console.log("dans failedData : il se peut que vous n'ayez pas de réseau !");
-  }
+
+
+  manageChangeQuestion = event => {
+    console.log("dans manageChangeQuestion");
+    /* // copie de la propriété state
+    const copy_state = { ...this.state };
+
+    // Récupération de l'input du formulaire
+    copy_state.question = event.target.value;
+
+    //Modification du state via setState
+    this.setState(copy_state); */
+  };
+  manageChangeReponse = event => {
+    console.log("dans manageChangeReponse");
+    /* // copie de la propriété state
+    const copy_state = { ...this.state };
+
+    // Récupération de l'input du formulaire
+    copy_state.reponse = event.target.value;
+
+    //Modification du state via setState
+    this.setState(copy_state); */
+  };
 
   render() {
     return (
       <section>
-        <h2>{this.props.titre}</h2>
+        <h2>{this.props.colonne.title}</h2>
         {/* Instanciation des cartes grâce au parcours du tableau
         this.state.cartes */}
-        {this.state.cartes.map(carte => {
-          return <Carte key={carte.id} question={carte.question} reponse={carte.reponse} />
+        {this.props.colonne.cartes.map(carte => {
+          return (
+            <Carte
+              key={carte.id}
+              onShowHideReponse={this.props.onShowHideReponse}
+              carte={carte}
+              colonne={this.props.colonne}
+              onManageChangeReponse={this.manageChangeReponse}
+              onManageChangeQuestion={this.manageChangeQuestion}
+            />
+          );
         })}
       </section>
     );
